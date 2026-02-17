@@ -3,12 +3,25 @@ import neat
 import matplotlib.pyplot as plt
 import time
 import networkx as nx
+import os
+import neat
 
-# ================= CONFIG =================
-CONFIG_FILE = "config-feedforward.txt"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CONFIG_FILE = os.path.join(BASE_DIR, "config-feedforward.txt")
 
-st.set_page_config(layout="wide")
-st.title("🧬 Research Dashboard: Self-Evolving Neural Networks (NEAT)")
+config = neat.Config(
+    neat.DefaultGenome,
+    neat.DefaultReproduction,
+    neat.DefaultSpeciesSet,
+    neat.DefaultStagnation,
+    CONFIG_FILE
+)
+
+# # ================= CONFIG =================
+# CONFIG_FILE = "config-feedforward.txt"
+
+# st.set_page_config(layout="wide")
+# st.title("🧬 Research Dashboard: Self-Evolving Neural Networks (NEAT)")
 
 # ================= CONTROLS =================
 GENERATIONS = st.slider(
