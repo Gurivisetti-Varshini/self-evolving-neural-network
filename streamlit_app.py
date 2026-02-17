@@ -164,6 +164,10 @@ def animated_plot(y, label):
         placeholder.pyplot(fig, use_container_width=False)
         time.sleep(SPEED_LEVEL)
 
+import os;
+local_dir = os.path.dirname(__file__); 
+config_path = os.path.join(local_dir, 'config-feedforward')
+
 # ================= RUN =================
 if st.button("🚀 Run Evolution"):
     with st.spinner("Running NEAT evolution..."):
