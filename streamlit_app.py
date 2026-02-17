@@ -220,7 +220,10 @@ config_path = os.path.join(local_dir, 'config-feedforward')
 # ================= RUN =================
 if st.button("🚀 Run Evolution"):
     with st.spinner("Running NEAT evolution..."):
-        best, mean, nodes, conns, species, genomes_by_gen, winner = run_neat(GENERATIONS)
+      best, mean, nodes, conns, species, genomes_by_gen, winner = run_neat(
+    GENERATIONS, config
+)
+
 
     st.success("Evolution completed successfully")
 
