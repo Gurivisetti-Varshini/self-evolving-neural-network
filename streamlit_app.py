@@ -6,9 +6,17 @@ import networkx as nx
 import os
 import neat
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-CONFIG_FILE = os.path.join(BASE_DIR, "config-feedforward.txt")
+# When deployed on Streamlit Cloud, this file lives at:
+# /mount/src/self-evolving-neural-network/streamlit_app.py
 
+# So the base directory becomes:
+# /mount/src/self-evolving-neural-network/
+# BASE_DIR = "/mount/src/self-evolving-neural-network"
+
+# Full deployed path to the NEAT configuration file:
+CONFIG_FILE = " "
+
+# Load NEAT configuration
 config = neat.Config(
     neat.DefaultGenome,
     neat.DefaultReproduction,
@@ -16,6 +24,7 @@ config = neat.Config(
     neat.DefaultStagnation,
     CONFIG_FILE
 )
+
 
 # # ================= CONFIG =================
 # CONFIG_FILE = "config-feedforward.txt"
