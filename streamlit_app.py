@@ -14,7 +14,7 @@ import neat
 # BASE_DIR = "/mount/src/self-evolving-neural-network"
 
 # Full deployed path to the NEAT configuration file:
-CONFIG_FILE = " "
+CONFIG_FILE = "config-feedforward.txt "
 
 # Load NEAT configuration
 config = neat.Config(
