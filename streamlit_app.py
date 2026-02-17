@@ -112,16 +112,46 @@ def draw_topology(genome, generation):
     return fig
 
 # ================= RUN NEAT =================
-def run_neat(gens):
-    config = neat.Config(
-        neat.DefaultGenome,
-        neat.DefaultReproduction,
-        neat.DefaultSpeciesSet,
-        neat.DefaultStagnation,
-        CONFIG_FILE
-    )
+# def run_neat(gens):
+#     config = neat.Config(
+#         neat.DefaultGenome,
+#         neat.DefaultReproduction,
+#         neat.DefaultSpeciesSet,
+#         neat.DefaultStagnation,
+#         CONFIG_FILE
+#     )
 
-    pop = neat.Population(config)
+#     pop = neat.Population(config)
+
+#     best_fitness = []
+#     mean_fitness = []
+#     node_counts = []
+#     conn_counts = []
+#     species_counts = []
+#     genomes_by_gen = []
+
+#     def per_generation(genomes, config):
+#         eval_genomes(genomes, config)
+
+#         fitnesses = [g.fitness for _, g in genomes]
+#         best = max(fitnesses)
+#         mean = sum(fitnesses) / len(fitnesses)
+
+#         best_genome = max([g for _, g in genomes], key=lambda g: g.fitness)
+
+#         best_fitness.append(best)
+#         mean_fitness.append(mean)
+#         node_counts.append(len(best_genome.nodes))
+#         conn_counts.append(len(best_genome.connections))
+#         species_counts.append(len(pop.species.species))
+#         genomes_by_gen.append([g for _, g in genomes])
+
+#     winner = pop.run(per_generation, gens)
+
+#     return best_fitness, mean_fitness, node_counts, conn_counts, species_counts, genomes_by_gen, winner
+
+def run_neat(generations):
+    import neat
 
     best_fitness = []
     mean_fitness = []
@@ -130,25 +160,39 @@ def run_neat(gens):
     species_counts = []
     genomes_by_gen = []
 
-    def per_generation(genomes, config):
-        eval_genomes(genomes, config)
+    # Create population
+    p = neat.Population(config)
 
-        fitnesses = [g.fitness for _, g in genomes]
-        best = max(fitnesses)
-        mean = sum(fitnesses) / len(fitnesses)
+    stats = neat.StatisticsReporter()
+    p.add_reporter(stats)
 
-        best_genome = max([g for _, g in genomes], key=lambda g: g.fitness)
+    # Run NEAT
+    winner = p.run(eval_genomes, generations)
 
-        best_fitness.append(best)
-        mean_fitness.append(mean)
-        node_counts.append(len(best_genome.nodes))
-        conn_counts.append(len(best_genome.connections))
-        species_counts.append(len(pop.species.species))
-        genomes_by_gen.append([g for _, g in genomes])
+    # Collect statistics
+    for gen in range(len(stats.most_fit_genomes)):
+        best_fitness.append(stats.most_fit_genomes[gen].fitness)
+        mean_fitness.append(stats.get_fitness_mean(gen))
 
-    winner = pop.run(per_generation, gens)
+        nodes = len(stats.most_fit_genomes[gen].nodes)
+        conns = len(stats.most_fit_genomes[gen].connections)
 
-    return best_fitness, mean_fitness, node_counts, conn_counts, species_counts, genomes_by_gen, winner
+        node_counts.append(nodes)
+        conn_counts.append(conns)
+        species_counts.append(len(stats.species_sizes[gen]))
+        genomes_by_gen.append(stats.generation_statistics[gen])
+
+    # RETURN EXACTLY 7 VALUES
+    return (
+        best_fitness,
+        mean_fitness,
+        node_counts,
+        conn_counts,
+        species_counts,
+        genomes_by_gen,
+        winner
+    )
+
 
 # ================= EXPLANATION WRAPPER =================
 def explain(title, text):
